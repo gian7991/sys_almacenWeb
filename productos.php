@@ -37,12 +37,6 @@
 							<input type="text" class="form-control form-control-sm" onkeypress='return validaNumericos(event)' placeholder="Cantidad" id="txtCantidad" name="txtCantidad">
 						</div>
 					</div>
-					<div class="form-group row">
-						<label for="txtPrecio" class="col-sm-4 col-form-label col-form-label-sm">Precio/Unidad:</label>
-						<div class="col-sm-8">
-							<input type="text" class="form-control form-control-sm" onkeypress='return validaNumericos(event)' placeholder="S/." id="txtPrecio" name="txtPrecio">
-						</div>
-					</div>						
 					<!--COMBO-->
 					<div class="form-group row">
 						<label for="cbxMedida" class="col-sm-4 col-form-label col-form-label-sm">Medidad:</label>
@@ -55,6 +49,12 @@
 							</div>
 						</div>											
 					</div>
+					<div class="form-group row">
+						<label for="txtPrecio" class="col-sm-4 col-form-label col-form-label-sm">Precio/Unidad:</label>
+						<div class="col-sm-8">
+							<input type="text" class="form-control form-control-sm" onkeypress='return validaNumericos(event)' placeholder="S/." id="txtPrecio" name="txtPrecio">
+						</div>
+					</div>											
 					<div class="form-group row">
 						<label for="txtPresentacion" class="col-sm-4 col-form-label col-form-label-sm">Presentacion:</label>
 						<div class="col-sm-8">
