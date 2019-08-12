@@ -8,3 +8,6 @@ Proyecto creado con PHP, AJAX, Bootstrap y MySql
 
 ### Vista de Reportes
 ![reportes](https://user-images.githubusercontent.com/45782176/62905470-4a0da980-bd30-11e9-8118-046bcc010d15.png)
+
+### Vista de Responsive
+![responsive-productos](https://user-images.githubusercontent.com/45782176/62905730-5fcf9e80-bd31-11e9-94d4-3d5e822c2c1e.png)
