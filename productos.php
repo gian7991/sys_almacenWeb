@@ -78,12 +78,13 @@
 				<table class="table table-sm table-hover table-responsive">
 					<thead class="thead-light">
 						<tr>
-							<th>Codigo</th>
 							<th>Nombre</th>
-							<th>Descripcion</th>
-							<th>Fecha Registro</th>
-							<th>Cantidad</th>							
-							<th>Presentacion</th>							
+							<th>cantidad</th>
+							<th>precio</th>
+							<th>Presentacion</th>
+							<th>Medida</th>							
+							<th>Registro</th>
+							<th>Caducidad</th>							
 							<th>Editar</th>
 							<th>Eliminar</th>							
 						</tr>
@@ -125,7 +126,7 @@
 				</form>
 			</div>
 			<div class="modal-footer">
-				<button type="button" class="btn btn-secondary" data-dismiss="modal" id="btnCerrar">Cerrar</button>
+				<button type="button" class="btn btn-secondary" id="btnModalMedidaCerrar" data-dismiss="modal">Cerrar</button>
 				<button type="button" class="btn btn-primary" id="btnAgregarMedida">Guardar</button>
 			</div>
 			</div>
@@ -135,23 +136,43 @@
 		<div class="modal-dialog modal-lg" role="document">
 			<div class="modal-content">
 			<div class="modal-header">
-				<h5 class="modal-title" id="exampleModalLabel">Editar</h5><h6 id="codigoProducto"></h6>
+				<h5 class="modal-title" id="exampleModalLabel">Editar</h5>
 				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 				<span aria-hidden="true">&times;</span>
 				</button>
 			</div>
 			<div class="modal-body">
-				<form id="frm-editar">
-					<div class="form-group row">
-						<label for="txtCantidad" class="col-sm-4 col-form-label col-form-label-sm">Cantidad:</label>
-						<div class="col-sm-8">
-							<input type="text" class="form-control form-control-sm" onkeypress='return validaNumericos(event)' placeholder="Cantidad" id="txtCantidad" name="txtCantidad">
+				<div class="container">
+					<form id="frm-editar">
+						<div class="form-group row">
+							<label class="col-sm-3 col-form-label col-form-label-sm">Nombre:</label>								
+							<div class="col-md-4">
+								<h6 id="lblEditarNombre"></h6>
+							</div>
 						</div>
-					</div>
-				</form>
+						<div class="form-group row">
+							<label for="txtEditarCantidad" class="col-sm-3 col-form-label col-form-label-sm">Cantidad:</label>
+							<div class="col-sm-4">
+								<input type="text" class="form-control form-control-sm" onkeypress='return validaNumericos(event)' placeholder="Cantidad" id="txtEditarCantidad" name="txtEditarCantidad">
+							</div>
+						</div>
+						<div class="form-group row">
+							<label for="txtEditarPrecio" class="col-sm-3 col-form-label col-form-label-sm">Precio:</label>
+							<div class="col-sm-4">
+								<input type="text" class="form-control form-control-sm" onkeypress='return validaNumericos(event)' placeholder="Precio" id="txtEditarPrecio" name="txtEditarPrecio">
+							</div>
+						</div>
+						<div class="form-group row">
+							<label for="dtEditarCaducidad" class="col-sm-3 col-form-label col-form-label-sm">F Caducidad:</label>
+							<div class="col-sm-4">
+								<input type="date" class="form-control form-control-sm" id="dtEditarCaducidad" name="dtEditarCaducidad">
+							</div>
+						</div>	
+					</form>
+				</div>
 			</div>
 			<div class="modal-footer">
-				<button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+				<button type="button" class="btn btn-secondary" id="btnModalEditarCerrar" data-dismiss="modal">Cerrar</button>
 				<button type="button" class="btn btn-success" id="btnModalEditar">Guardar</button>
 			</div>
 			</div>
@@ -181,19 +202,19 @@ $(document).ready(function(){
 		$.ajax({
 			url: 'proc/cargarProductos.php',
 			type: 'GET',
-			success: function(response) {
+			success: function(response) {				
 				const tasks = JSON.parse(response);
 				let template = '';
-				tasks.forEach(task => {
-				
+				tasks.forEach(task => {					
 				template += `
-						<tr taskId="${task.id}">
-							<td>${task.id}</td>
-							<td>${task.name}</td>
-							<td>${task.description}</td>
-							<td>${task.fecha}</td>
-							<td>${task.description}</td>
-							<td>${task.description}</td>
+						<tr taskId="${task.id}">							
+							<td>${task.nombre}</td>
+							<td>${task.cantidad}</td>
+							<td>${task.precio}</td>
+							<td>${task.presentacion}</td>
+							<td>${task.unidad}</td>
+							<td>${task.f_registro}</td>
+							<td>${task.f_caducidad}</td>
 							<td><button class="btnEditar btn btn-outline-success" data-toggle="modal" data-target="#editarProductoModal"><i class="fas fa-pencil-alt"></i></button></td>
 							<td><button class="btnEliminar btn btn-outline-danger"><i class="fas fa-trash-alt"></i></button></td>
 						</tr>
@@ -242,40 +263,56 @@ $(document).ready(function(){
 	
 	$('#add-form').submit(e => {
 		e.preventDefault();
-		if(validacion()){					
-			var datos = $('#add-form').serialize();  							
+		if(validacion()){
+			var datos = $('#add-form').serialize();
 			$.ajax({
 				url:'proc/addProducto.php',
 				type:'POST',
 				data:datos,
-				success:function(response){										
+				success:function(response){
 					$('#add-form').trigger('reset');
 					cargarTabla();
 				}
 			});
-		}		
+		}
 	});
 
 	$(document).on('click', '.btnEliminar', (e) => {
     if(confirm('Estas seguro de Eliminar este Producto?')) {
-		const element = $(this)[0].activeElement.parentElement.parentElement;		
+		const element = $(this)[0].activeElement.parentElement.parentElement;
       	const id = $(element).attr('taskId');
-      	$.post('proc/deleteProducto.php', {id},(response) => {			  
+      	$.post('proc/deleteProducto.php', {id},(response) => {
 			cargarTabla();
       });
     }
   });
 
   $(document).on('click', '.btnEditar', (e) => {
-		const element = $(this)[0].activeElement.parentElement.parentElement;		
-		  const id = $(element).attr('taskId');	
-		  $('#codigoProducto').html("2");		  	
-		idProducto=id;		  	
+		const element = $(this)[0].activeElement.parentElement.parentElement;
+		const id = $(element).attr('taskId');
+		$.post("proc/searchProducto.php",{id},(response)=>{
+			const data=JSON.parse(response);			
+			data.forEach(producto=>{	
+				$("#lblEditarNombre").html(producto.nombre);			
+				$("#txtEditarCantidad").val(producto.cantidad);
+				$("#txtEditarPrecio").val(producto.precio);	
+				$("#dtEditarCaducidad").val(producto.f_caducidad);								
+			});			
+		});		
+		idProducto=id;
   });
 
   $('#btnModalEditar').click(function(){
 	  let datos=$('#frm-editar').serialize();
-	  console.log(datos);
+	  datos+=("&id="+idProducto);
+	  $.post("proc/editProducto.php",datos,(response)=>{
+		if(response==1){
+			cargarTabla();
+			$("#btnModalEditarCerrar").click();
+		}else{
+			console.log(response);
+		}
+	  });	  
   });
 
   $('#btnAgregarMedida').click(function(){
@@ -287,7 +324,7 @@ $(document).ready(function(){
 		  }
 		  
 	  });
-	$('#btnCerrar').click();
+	$('#btnModalMedidaCerrar').click();
   });
 });
 </script>
