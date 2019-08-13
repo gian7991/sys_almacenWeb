@@ -24,23 +24,23 @@
 			<div class="card-header">Reportes de Articulos</div>
 			<div class="card-body">
 				<div class="container">
-					<form id="frm-filtro" method="post" action="proc/reportes/excel.php">
+					<form id="frm-filtro">
 						<div class="row ">
 							<div class="col-md-4 form-group row">
-								<label for="txtCodigo" class="col-sm-4 col-form-label">F Inicial:</label>
+								<label for="dtInicial" class="col-sm-4 col-form-label">F Inicial:</label>
 								<div class="col-sm-8">
-									<input type="date" class="form-control" id="dtCaducidad" name="dtCaducidad">
+									<input type="date" class="form-control" id="dtInicial" name="dtInicial">
 								</div>
 							</div>
 							<div class="col-md-4 form-group row">
-								<label for="txtNombre" class="col-sm-4 col-form-label">F Final:</label>
+								<label for="dtFinal" class="col-sm-4 col-form-label">F Final:</label>
 								<div class="col-sm-8">
-									<input type="date" class="form-control" id="dtCaducidad" name="dtCaducidad">
+									<input type="date" class="form-control" id="dtFinal" name="dtFinal">
 								</div>
 							</div>
 							<div class="col-md-4 form-group row">
-								<div class="col-md-6"><button class="btn btn-info">Buscar</button></div>
-								<div class="col-md-6 d-flex justify-content-end "><button class="btn btn-outline-info ">Mostrar Todos</button></div>														
+								<div class="col-md-6"><button class="btn btn-info" id="btnBuscarFecha">Buscar</button></div>
+								<div class="col-md-6 d-flex justify-content-end "><button class="btn btn-outline-info" id="btnBuscarTodos">Mostrar Todos</button></div>														
 							</div>
 						</div>
 					</form>
@@ -73,7 +73,7 @@
 							<button class="btnPdf col-md-12 btn btn-danger mt-2">Guardar Pdf <i class="far fa-file-pdf"></i></button>
 						</div>
 						<div class="col-md-6">
-							<button class="col-md-12 btn btn-success mt-2">Guardar Excel <i class="far fa-file-excel"></i></button>
+							<button class="btnExcel col-md-12 btn btn-success mt-2">Guardar Excel <i class="far fa-file-excel"></i></button>
 						</div>
 					</div>
 				</div>	
@@ -92,18 +92,10 @@
 <script type="text/javascript">
 $(document).ready(function(){
 	cargarGrid();
-	$(document).on('click', '.btnPdf', (e) => {
-		var datos=$('#frm-filtro').serialize();
-		$('#frm-filtro').submit();
-
-		/*$.post("proc/reportes/excel.php",datos,function(response){
-			console.log(response);
-		});*/
-	});
 
 	function cargarGrid(){
-		$.get("proc/cargarReporteGrid.php",function(response){
-			console.log(response);
+		var datos=$("#frm-filtro").serialize();		
+		$.post("proc/cargarReporteGrid.php",datos,function(response){				
 			const tasks = JSON.parse(response);
 			let template = '';
 			tasks.forEach(task => {				
@@ -125,5 +117,28 @@ $(document).ready(function(){
 		});
 	}
 
+	$("#btnBuscarTodos").click(function(e){
+		e.preventDefault();
+		cargarGrid();
+		$("#frm-filtro").trigger('reset');
+	});
+
+	$("#btnBuscarFecha").click(function(e){
+		e.preventDefault();
+		cargarGrid();
+		$("#frm-filtro").trigger('reset');
+	});
+
+	$(document).on('click', '.btnExcel', (e) => {	
+
+		// $.ajax({
+		// 	url:"proc/reportes/excel.php",
+		// 	method:"GET"
+		// });
+		// $.get("proc/reportes/excel.php",function(response){
+		// 	console.log(response);
+		// });
+
+	});
 });
 </script>
