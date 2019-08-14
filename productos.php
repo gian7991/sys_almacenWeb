@@ -202,7 +202,8 @@ $(document).ready(function(){
 		$.ajax({
 			url: 'proc/cargarProductos.php',
 			type: 'GET',
-			success: function(response) {				
+			success: function(response) {
+				console.log(response);				
 				const tasks = JSON.parse(response);
 				let template = '';
 				tasks.forEach(task => {					

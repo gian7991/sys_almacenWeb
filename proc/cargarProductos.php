@@ -1,7 +1,7 @@
 <?php
   include('db_cnn.php');
 
-  $query = "SELECT * from producto p inner join umedida m on m.id=p.id";
+  $query = "SELECT * from producto p inner join umedida m on m.id=p.id_medida";
 
   if(!$resultado=$cn->query($query)) {
     echo("FALLA EN cargarProductos.php");
