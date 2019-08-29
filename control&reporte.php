@@ -24,7 +24,7 @@
 			<div class="card-header">Reportes de Articulos</div>
 			<div class="card-body">
 				<div class="container">
-					<form id="frm-filtro">
+					<form id="frm-filtro" action="proc/reportes/excel.php">
 						<div class="row ">
 							<div class="col-md-4 form-group row">
 								<label for="dtInicial" class="col-sm-4 col-form-label">F Inicial:</label>
@@ -47,7 +47,7 @@
 				</div>
 				<hr/>
 				<div class="container">
-					<table class="table table-responsive">
+					<table class="table table-responsive-md">
 						<thead class="thead-light">
 							<tr>
 								<th>Codigo</th>
@@ -131,13 +131,7 @@ $(document).ready(function(){
 
 	$(document).on('click', '.btnExcel', (e) => {	
 
-		// $.ajax({
-		// 	url:"proc/reportes/excel.php",
-		// 	method:"GET"
-		// });
-		// $.get("proc/reportes/excel.php",function(response){
-		// 	console.log(response);
-		// });
+		$("#frm-filtro").submit();
 
 	});
 });

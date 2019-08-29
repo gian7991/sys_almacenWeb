@@ -75,7 +75,7 @@
 			</div>
 
 			<div class="col-md-8">
-				<table class="table table-sm table-hover table-responsive">
+				<table class="table table-sm table-hover table-responsive-md">
 					<thead class="thead-light">
 						<tr>
 							<th>Nombre</th>
